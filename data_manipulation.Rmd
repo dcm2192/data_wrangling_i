@@ -127,8 +127,50 @@ arrange(litters_df, pups_born_alive, gd0_weight)
 
 ## PIPING!!!!
 
+DON'T DO THIS CODE -- it sucks and creates a million dfs along the way
+```{r}
+litters_df = read_csv("data_import_examples/FAS_litters.csv", na = c("NA", "", "."))
+
+litters_df = janitor::clean_names(litters_df)
+
+litters_df_var = select(litters_df, -pups_born_alive)
+
+litters_with_filter = filter(litters_df_var, group == "Con7")
+
+litters_wt_gain = mutate(litters_with_filter, wt_gain = gd18_weight - gd0_weight)
+```
+
+DEFINITELY DON'T DO THIS CODE
+```{r}
+litters_df_clean = 
+  drop_na(
+    mutate(
+      select(
+        janitor::clean_names(
+          read_csv("./data_import_examples/FAS_litters.csv", na = c("NA", ".", ""))
+          ), 
+      -pups_survive
+      ),
+    wt_gain = gd18_weight - gd0_weight,
+    group = str_to_lower(group)
+    ),
+  wt_gain
+  )
+```
 
 
+DO THIS INSTEAD!!!
+also, |> is the same as %>% 
+```{r}
+litters_df = 
+  read_csv("data_import_examples/FAS_litters.csv", na = c("NA", "", ".")) |>
+  janitor::clean_names() |>
+  select(-pups_born_alive) |>
+  filter(group == "Con7") |>
+  mutate(
+    wt_gain = gd18_weight - gd0_weight
+  )
+```
 
 
 
