@@ -4,3 +4,17 @@ author: "Dylan Morgan"
 date: "2024-09-24"
 output: github_document
 ---
+
+```{r message = FALSE}
+library(tidyverse)
+```
+
+## `pivot_longer`
+```{r}
+pulse_df = 
+  haven::read_sas("./data_import_examples/public_pulse_data.sas7bdat") |>
+  janitor::clean_names()
+
+pulse_df
+```
+
