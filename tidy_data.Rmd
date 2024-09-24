@@ -1,0 +1,6 @@
+---
+title: "tidy_data"
+author: "Dylan Morgan"
+date: "2024-09-24"
+output: github_document
+---
