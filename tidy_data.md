@@ -62,3 +62,38 @@ pulse_tidy_df
     ##  9 10022  58.5 male  bl       14
     ## 10 10022  58.5 male  01m       3
     ## # ℹ 4,338 more rows
+
+Rewrite, combine, and extend (to add a mutate)
+
+``` r
+pulse_df = 
+  haven::read_sas("./data_import_examples/public_pulse_data.sas7bdat") |>
+  janitor::clean_names() |>
+  pivot_longer(
+    bdi_score_bl:bdi_score_12m,
+    names_to = "visit", 
+    names_prefix = "bdi_score_",
+    values_to = "bdi") |>
+  mutate(
+    visit = replace(visit, visit == "bl", "00m"),
+    visit = factor(visit)) 
+
+print(pulse_df, n = 12)
+```
+
+    ## # A tibble: 4,348 × 5
+    ##       id   age sex   visit   bdi
+    ##    <dbl> <dbl> <chr> <fct> <dbl>
+    ##  1 10003  48.0 male  00m       7
+    ##  2 10003  48.0 male  01m       1
+    ##  3 10003  48.0 male  06m       2
+    ##  4 10003  48.0 male  12m       0
+    ##  5 10015  72.5 male  00m       6
+    ##  6 10015  72.5 male  01m      NA
+    ##  7 10015  72.5 male  06m      NA
+    ##  8 10015  72.5 male  12m      NA
+    ##  9 10022  58.5 male  00m      14
+    ## 10 10022  58.5 male  01m       3
+    ## 11 10022  58.5 male  06m       8
+    ## 12 10022  58.5 male  12m      NA
+    ## # ℹ 4,336 more rows

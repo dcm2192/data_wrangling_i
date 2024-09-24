@@ -33,3 +33,23 @@ pulse_tidy_df =
 pulse_tidy_df
 ```
 
+Rewrite, combine, and extend (to add a mutate)
+```{r}
+pulse_df = 
+  haven::read_sas("./data_import_examples/public_pulse_data.sas7bdat") |>
+  janitor::clean_names() |>
+  pivot_longer(
+    bdi_score_bl:bdi_score_12m,
+    names_to = "visit", 
+    names_prefix = "bdi_score_",
+    values_to = "bdi") |>
+  mutate(
+    visit = replace(visit, visit == "bl", "00m"),
+    visit = factor(visit)) 
+
+print(pulse_df, n = 12)
+```
+
+
+
+
