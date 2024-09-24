@@ -9,6 +9,8 @@ library(tidyverse)
 
 ## `pivot_longer`
 
+Load the pulse data
+
 ``` r
 pulse_df = 
   haven::read_sas("./data_import_examples/public_pulse_data.sas7bdat") |>
@@ -31,3 +33,32 @@ pulse_df
     ##  9 10091  76.0 male              0             3             4             0
     ## 10 10092  74.2 female           10             2            11             6
     ## # ℹ 1,077 more rows
+
+Wide format to long format
+
+``` r
+pulse_tidy_df = 
+  pivot_longer(
+    pulse_df, 
+    bdi_score_bl:bdi_score_12m,
+    names_to = "visit", 
+    names_prefix = "bdi_score_",
+    values_to = "bdi")
+
+pulse_tidy_df
+```
+
+    ## # A tibble: 4,348 × 5
+    ##       id   age sex   visit   bdi
+    ##    <dbl> <dbl> <chr> <chr> <dbl>
+    ##  1 10003  48.0 male  bl        7
+    ##  2 10003  48.0 male  01m       1
+    ##  3 10003  48.0 male  06m       2
+    ##  4 10003  48.0 male  12m       0
+    ##  5 10015  72.5 male  bl        6
+    ##  6 10015  72.5 male  01m      NA
+    ##  7 10015  72.5 male  06m      NA
+    ##  8 10015  72.5 male  12m      NA
+    ##  9 10022  58.5 male  bl       14
+    ## 10 10022  58.5 male  01m       3
+    ## # ℹ 4,338 more rows
